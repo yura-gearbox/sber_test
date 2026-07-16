@@ -1,0 +1,13 @@
+{
+  "delays": [0, 1],
+  "headers": [
+    {},
+    {
+      "header1": "value1"
+    },
+    {
+      "Header1": "value1",
+      "header2": "value2"
+    }
+  ]
+}
