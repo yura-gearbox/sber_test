@@ -10,17 +10,18 @@
 """
 
 import pytest
-import requests
 import json
 import models
 from data import BASE_URL, DEFAULT_TIMEOUT, ApiData
-from api_client import ApiClient, check_status, check_content_type, check_status_in_list, check_value_is_equal, check_value_is_empty, check_value_is_none
+from api_client import ApiClient, check_status, check_status_in_list, check_value_is_equal, check_value_is_empty, check_value_is_none
 
 pytestmark = pytest.mark.api
 
+
 @pytest.fixture(scope='session')
 def api_session():
-    session = ApiClient(BASE_URL, DEFAULT_TIMEOUT, {'Accept': 'application/json'})
+    session = ApiClient(BASE_URL, DEFAULT_TIMEOUT, {
+                        'Accept': 'application/json'})
     yield session
     session.close()
 
@@ -111,7 +112,8 @@ def test_post_request_by_file(api_session, file_payload):
 
 @pytest.mark.parametrize('status', ApiData.some_status_codes)
 def test_status_code_request(api_session, status):
-    response = api_session.get(f'/status/{status}', validate=False, allow_redirects=False)
+    response = api_session.get(
+        f'/status/{status}', validate=False, allow_redirects=False)
     check_status(response.status_code, status)
 
 
@@ -119,8 +121,10 @@ def test_multiple_status_codes_request(api_session):
     endpoint = f'/status/{",".join([str(item) for item in ApiData.some_multiple_status_codes])}'
     response_status_codes = set()
     for _ in range(10):
-        response = api_session.get(endpoint, validate=False, allow_redirects=False)
-        check_status_in_list(response.status_code, ApiData.some_multiple_status_codes)
+        response = api_session.get(
+            endpoint, validate=False, allow_redirects=False)
+        check_status_in_list(response.status_code,
+                             ApiData.some_multiple_status_codes)
         response_status_codes.add(response.status_code)
 
     assert len(response_status_codes) > 1
